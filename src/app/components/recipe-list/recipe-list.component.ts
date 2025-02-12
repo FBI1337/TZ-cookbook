@@ -10,6 +10,8 @@ import { Recipe } from '../../models/recipe.model';
     styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent implements OnInit {
+
+    title = 'TZ-cookbook';
     recipes: Recipe[] = [];
 
     constructor(private recipeService: RecipeService) {}
