@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RecipeService } from '../../services/recipe.service';
-import { Recipe } from '../../models/recipe.model';
+import { Ingredient, Recipe } from '../../models/recipe.model';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -15,9 +15,7 @@ export class RecipeFormComponent {
         this.recipeForm = this.fb.group({
             title: ['', Validators.required],
             description: ['', Validators.required],
-            ingredients: this.fb.array([
-                this.createIngredient()
-            ]),
+            ingredients: this.fb.array([], Validators.required),
             imageUrl: ['']
         });
     }
@@ -30,16 +28,20 @@ export class RecipeFormComponent {
         return this.fb.group({
             name: ['', Validators.required],
             amount: [0, [Validators.required, Validators.min(1)]],
-            unit: ['']
+            unit: ['', Validators.required]
         })
     }
 
     addIngredient() {
         this.ingredients.push(this.createIngredient());
+        this.recipeForm.updateValueAndValidity();
+        console.log('qwerty добавлен:', this.ingredients.value);
     }
 
     removeIngredient(index: number) {
         this.ingredients.removeAt(index);
+        this.recipeForm.updateValueAndValidity();
+        console.log('qwerty удален:', this.ingredients.value);
     }
 
     saveRecipe() {
@@ -47,15 +49,22 @@ export class RecipeFormComponent {
             const newRecipe: Recipe = {
                 title: this.recipeForm.value.title,
                 description: this.recipeForm.value.description,
-                ingredients: this.recipeForm.value.ingredients,
+                ingredients: this.recipeForm.value.ingredients.map((inng: Ingredient) =>({
+                    name: inng.name.trim(),
+                    amount: inng.amount,
+                    unit: inng.unit.trim()
+                })),
                 imageUrl: this.recipeForm.value.imageUrl,
                 createdAt: new Date()
             };
-            this.recipeService.addRecipe(newRecipe);
+
             console.log('Рецепт сохранен', newRecipe);
+            this.recipeService.addRecipe(newRecipe);
             this.recipeForm.reset();
+            this.ingredients.clear();
+            this.recipeForm.updateValueAndValidity();
         } else {
-            console.log('Форма недействительна');
+            console.log('Форма недействительна', this.recipeForm.errors);
         }
     }
 }

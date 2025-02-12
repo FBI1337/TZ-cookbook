@@ -32,6 +32,6 @@
         </div>
 
         <button mat-button color="primary" (click)="addIngredient()">Добавить ингредиент</button>
-        <button mat-raised-button color="accent" type="submit" (click)="saveRecipe()" [disabled]="!recipeForm.valid">Сохранить рецепт</button>
+        <button mat-raised-button color="accent" type="submit" (click)="saveRecipe()" [disabled]="recipeForm.invalid">Сохранить рецепт</button>
     </form>
 </mat-card>
