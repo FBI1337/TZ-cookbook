@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-card-title>Создать рецепт</mat-card-title>
+    <form [formGroup]="recipeForm">
+        <mat-form-field>
+            <mat-label>Название рецепта</mat-label>
+            <input matInput formControlName="title" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Описание</mat-label>
+            <textarea matInput formControlName="description" required></textarea>
+        </mat-form-field>
+
+        <h3>Ингридиенты</h3>
+
+        <div formArrayName="ingredients">
+            <div *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">
+                <mat-form-field>
+                    <mat-label>Название</mat-label>
+                    <input matInput formControlName="name" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Единица измерения</mat-label>
+                    <input matInput formControlName="unit">
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" (click)="removeIngredient(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <button mat-button color="primary" (click)="addIngredient()">Добавить ингредиент</button>
+        <button mat-raised-button color="accent" type="submit" (click)="saveRecipe()" [disabled]="!recipeForm.valid">Сохранить рецепт</button>
+    </form>
+</mat-card>
