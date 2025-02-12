@@ -9,6 +9,6 @@ export interface Recipe {
     title: string;
     ingredients: Ingredient[];
     description: string;
-    imagePath?: string;
+    imageUrl?: string;
     createdAt: Date;
 }

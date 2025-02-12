@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: '/components/recipe-list/recipe-list.component.html',
-  styleUrls: ['./components/recipe-list/recipe-list.component.css']
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'TZ-cookbook';

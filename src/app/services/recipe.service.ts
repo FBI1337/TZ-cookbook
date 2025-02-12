@@ -15,6 +15,7 @@ export class RecipeService {
     constructor() {}
 
     addRecipe(recipe: Recipe) {
+      console.log('Добавление рецепта', recipe);
       recipe.id = (Math.random() * 1000).toFixed(0);
       recipe.createdAt = new Date();
       this.recipes.push(recipe);
@@ -30,6 +31,7 @@ export class RecipeService {
     }
 
     deleteRecipe(id: string) {
+      console.log('Удаление рецепта с ID', id);
       this.recipes = this.recipes.filter(r => r.id !== id);
       this.recipesSubject.next([...this.recipes]);
     }

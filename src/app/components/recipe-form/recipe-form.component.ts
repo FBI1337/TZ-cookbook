@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RecipeService } from '../../services/recipe.service';
 import { Recipe } from '../../models/recipe.model';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-recipe-list',
@@ -8,29 +9,53 @@ import { Recipe } from '../../models/recipe.model';
     styleUrls: ['./recipe-form.component.css']
 })
 export class RecipeFormComponent {
-    title = '';
-    ingredients = [{ name: '', amount: 0, unit: ''}];
-    description = '';
-    imageUrl = '';
+    recipeForm: FormGroup;
 
-    constructor(private recipeService: RecipeService) {}
+    constructor(private fb: FormBuilder, private recipeService: RecipeService) {
+        this.recipeForm = this.fb.group({
+            title: ['', Validators.required],
+            description: ['', Validators.required],
+            ingredients: this.fb.array([
+                this.createIngredient()
+            ]),
+            imageUrl: ['']
+        });
+    }
+
+    get ingredients() {
+        return this.recipeForm.get('ingredients') as FormArray;
+    }
+    
+    createIngredient(): FormGroup {
+        return this.fb.group({
+            name: ['', Validators.required],
+            amount: [0, [Validators.required, Validators.min(1)]],
+            unit: ['']
+        })
+    }
 
     addIngredient() {
-        this.ingredients.push({ name: '', amount: 0, unit: '' });
+        this.ingredients.push(this.createIngredient());
     }
 
     removeIngredient(index: number) {
-        this.ingredients.splice(index, 1);
+        this.ingredients.removeAt(index);
     }
 
     saveRecipe() {
-        const newRecipe: Recipe = {
-            title: this.title,
-            ingredients: this.ingredients,
-            description: this.description,
-            createdAt: new Date()
-        };
-        this.recipeService.addRecipe(newRecipe);
+        if(this.recipeForm.valid) {
+            const newRecipe: Recipe = {
+                title: this.recipeForm.value.title,
+                description: this.recipeForm.value.description,
+                ingredients: this.recipeForm.value.ingredients,
+                imageUrl: this.recipeForm.value.imageUrl,
+                createdAt: new Date()
+            };
+            this.recipeService.addRecipe(newRecipe);
+            console.log('Рецепт сохранен', newRecipe);
+            this.recipeForm.reset();
+        } else {
+            console.log('Форма недействительна');
+        }
     }
-
 }
