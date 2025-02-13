@@ -1,0 +1,24 @@
+mat-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 100%;
+}
+
+
+.recipe-img {
+    width: 100px;
+    height: 100px;
+}
+
+.recipeIng {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    overflow: auto;
+}
+
+.date {
+    text-align: right;
+}
