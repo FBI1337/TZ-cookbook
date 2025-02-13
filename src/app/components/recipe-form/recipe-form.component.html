@@ -1,5 +1,8 @@
 <mat-card>
-    <mat-card-title>Создать рецепт</mat-card-title>
+
+    <mat-card-title>
+        <h3 class="text">Создать рецепт</h3>
+    </mat-card-title>
     <form [formGroup]="recipeForm">
         <mat-form-field class="namerecipe">
             <mat-label>Название рецепта</mat-label>
@@ -11,7 +14,7 @@
             <textarea matInput formControlName="description" required></textarea>
         </mat-form-field>
 
-        <h3>Ингридиенты</h3>
+        <h3 class="text">Ингридиенты</h3>
 
         <div formArrayName="ingredients" class="ingredients">
             <div class="IngForm" *ngFor="let ingredient of ingredients.controls; let i = index" [formGroupName]="i">

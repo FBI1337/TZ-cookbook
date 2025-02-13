@@ -17,6 +17,9 @@ input {
     background-color: none;
 }
 
+.text {
+    text-align: center;
+}
 .namerecipe {
     padding: 20px 0px 0px 0px;
 }
@@ -30,15 +33,17 @@ input {
     text-align: center;
     background: transparent;
     box-shadow: none;
+    padding: 5px;
 }
 
 .ingredients {
     display: flex;
+    flex-direction: column;
 }
 
 .IngForm {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     width: 100%;
 }
