@@ -1,8 +1,15 @@
 <mat-card *ngFor="let recipe of recipes">
     <mat-card-title>{{ recipe.title }}</mat-card-title>
     <mat-card-subtitle>{{ recipe.createdAt | date }}</mat-card-subtitle>
-    <mat-dialog-content>{{ recipe.description }}</mat-dialog-content>
+    <img *ngIf="recipe.imageUrl" [src]="recipe.imageUrl" alt="{{ recipe.title }}" class="recipe-img">
+    <mat-dialog-content>
+        <p>{{ recipe.description }}</p>
+    </mat-dialog-content>
+    <mat-dialog-content>{{ recipe.ingredients }}</mat-dialog-content>
+
+
     <mat-card-actions>
+        <button mat-button color="primary" (click)="recipe.id && editRecipe(recipe)">Редактировать</button>
         <button mat-button (click)="recipe.id && deleteRecipe(recipe.id)">Удалить</button>
     </mat-card-actions>
 

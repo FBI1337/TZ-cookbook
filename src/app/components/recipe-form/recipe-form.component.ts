@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { Ingredient, Recipe } from '../../models/recipe.model';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-recipe-list',
@@ -10,61 +11,96 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class RecipeFormComponent {
     recipeForm: FormGroup;
+    recipeId: string | null = null; 
+    imagePreview: string | null = null;
 
-    constructor(private fb: FormBuilder, private recipeService: RecipeService) {
+    constructor(
+        private fb: FormBuilder,
+         private recipeService: RecipeService,
+         private route: ActivatedRoute, 
+         private router: Router,
+        ) {
         this.recipeForm = this.fb.group({
             title: ['', Validators.required],
             description: ['', Validators.required],
-            ingredients: this.fb.array([], Validators.required),
-            imageUrl: ['']
+            ingredients: this.fb.array([]),
+            imageUrl: ['', Validators.required]
         });
     }
 
-    get ingredients() {
+    get ingredients(): FormArray {
         return this.recipeForm.get('ingredients') as FormArray;
     }
     
-    createIngredient(): FormGroup {
+    createIngredient(ingredient: Ingredient = { name: '', amount: 1, unit: ''}): FormGroup {
         return this.fb.group({
-            name: ['', Validators.required],
-            amount: [0, [Validators.required, Validators.min(1)]],
-            unit: ['', Validators.required]
-        })
+            name: [ingredient.name, Validators.required],
+            amount: [ingredient.amount, [Validators.required, Validators.min(1)]],
+            unit: [ingredient.unit]
+        });
+    }
+
+    ngOnInit() {
+        this.route.paramMap.subscribe(params => {
+            const id = params.get('id');
+            if (id) {
+                this.recipeId = id;
+                const recipe = this.recipeService.getRecipeById(id);
+                if (recipe) {
+                    this.recipeForm.patchValue({
+                        title: recipe.title,
+                        description: recipe.description,
+                        imageUrl: recipe.imageUrl,
+                    });
+
+                    this.imagePreview = recipe.imageUrl ?? null;
+
+                    this.ingredients.clear();
+                    recipe.ingredients.forEach(ing => {
+                        this.ingredients.push(this.createIngredient(ing));
+                    });
+                }
+            }
+        });
+    }
+
+    onFileSelected(event: Event) {
+        const file = (event.target as HTMLInputElement).files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.imagePreview = reader.result as string;
+                this.recipeForm.patchValue({ imageUrl: this.imagePreview })
+            };
+            reader.readAsDataURL(file);
+        }
     }
 
     addIngredient() {
         this.ingredients.push(this.createIngredient());
-        this.recipeForm.updateValueAndValidity();
-        console.log('qwerty добавлен:', this.ingredients.value);
     }
 
     removeIngredient(index: number) {
         this.ingredients.removeAt(index);
-        this.recipeForm.updateValueAndValidity();
-        console.log('qwerty удален:', this.ingredients.value);
     }
 
     saveRecipe() {
         if(this.recipeForm.valid) {
             const newRecipe: Recipe = {
+                id: this.recipeId ?? (Math.random()*10000).toFixed(0),
                 title: this.recipeForm.value.title,
                 description: this.recipeForm.value.description,
-                ingredients: this.recipeForm.value.ingredients.map((inng: Ingredient) =>({
-                    name: inng.name.trim(),
-                    amount: inng.amount,
-                    unit: inng.unit.trim()
-                })),
+                ingredients: this.recipeForm.value.ingredients,
                 imageUrl: this.recipeForm.value.imageUrl,
                 createdAt: new Date()
             };
+            if (this.recipeId) {
+                this.recipeService.updateRecipe(newRecipe);
+            } else {
+                this.recipeService.addRecipe(newRecipe);
+            }
 
-            console.log('Рецепт сохранен', newRecipe);
-            this.recipeService.addRecipe(newRecipe);
-            this.recipeForm.reset();
-            this.ingredients.clear();
-            this.recipeForm.updateValueAndValidity();
-        } else {
-            console.log('Форма недействительна', this.recipeForm.errors);
+            this.router.navigate(['/']);
         }
     }
 }

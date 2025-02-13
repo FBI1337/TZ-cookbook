@@ -2,10 +2,33 @@ nav {
     display: flex;
     gap: 10px;
     padding: 10px;
+    border-bottom: 2px solid #ddd;
 }
 
 a {
     text-decoration: none;
     font-weight: bold;
     color: crimson;
+}
+
+.link {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1976d2;
+    padding: 10px;
+    transition: color 0.3s, background-color 0.3s, border-bottom 0.3s;
+}
+
+.link:hover {
+    color: #125699;
+    background-color: rgba(25, 118, 210, 0.1);
+    border-radius: 5px;
+}
+
+.link.active {
+    color: #fff;
+    background-color: #1976d2;
+    border-radius: 5px;
+    padding: 10px;
 }
