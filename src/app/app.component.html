@@ -1,6 +1,6 @@
 <nav>
-    <a routerLink="/">Список рецептов</a>
-    <a routerLink="/create">Добавить рецепт</a>
+    <a routerLink="/" class="link" [class.active]="isActive('/')">Список рецептов</a>
+    <a routerLink="/create" class="link" [class.active]="isActive('/create')">Добавить рецепт</a>
 </nav>
 
 <router-outlet></router-outlet>

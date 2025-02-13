@@ -35,4 +35,8 @@ export class RecipeService {
       this.recipes = this.recipes.filter(r => r.id !== id);
       this.recipesSubject.next([...this.recipes]);
     }
+
+    getRecipeById(id: string): Recipe | undefined {
+      return this.recipes.find(recipe => recipe.id === id);
+    }
 }
