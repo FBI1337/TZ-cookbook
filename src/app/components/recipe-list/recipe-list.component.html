@@ -1,25 +1,19 @@
-<mat-card *ngFor="let recipe of recipes">
-    <img *ngIf="recipe.imageUrl" [src]="recipe.imageUrl" alt="{{ recipe.title }}" class="recipe-img">
-    <mat-card-title class="recipeIng ">
-        <h1>{{ recipe.title }}</h1>
-        <mat-dialog-content>
-            <p>{{ recipe.description }}</p>
-        </mat-dialog-content>
-        <mat-dialog-content>
-            <h1>Ингридиенты:</h1>
-            <ul>
-                <li *ngFor="let ingredient of recipe.ingredients">
-                    {{ ingredient.name }} - {{ ingredient.amount }} - {{ ingredient.unit }}
-                </li>
-            </ul>
-        </mat-dialog-content>
-        <mat-card-subtitle class="date">{{ recipe.createdAt | date }}</mat-card-subtitle>
-    </mat-card-title>
-    
+<h1>Список рецептов</h1>
+<button mat-raised-button color="primary" (click)="addRecipe()">Создать рецепт</button>
 
-    <mat-card-actions>
-        <button mat-button color="primary" (click)="recipe.id && editRecipe(recipe)">Редактировать</button>
-        <button mat-button (click)="recipe.id && deleteRecipe(recipe.id)">Удалить</button>
-    </mat-card-actions>
-
-</mat-card>
+<mat-list>
+    <mat-list-item *ngFor="let recipe of recipes">
+        <img *ngIf="recipe.imageUrl" matListItemAvatar [src]="recipe.imageUrl" alt="{{recipe.title}}">
+        <h3 mat-line>{{ recipe.title }}</h3>
+        <p mat-line>Дата создания: {{ recipe.createdAt | date }}</p>
+        <button mat-icon-button (click)="viewRecipe(recipe.id)" aria-label="View">
+            <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button (click)="editRecipe(recipe.id)" aria-label="Edit">
+            <mat-icon>Edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteRecipe(recipe.id)" aria-label="Delete">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-list-item>
+</mat-list>

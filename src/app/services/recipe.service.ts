@@ -1,42 +1,61 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
 import { Recipe } from "../models/recipe.model";
+import { Observable, of } from "rxjs";
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class RecipeService {
+
     private recipes: Recipe[] = [];
-    private recipesSubject = new BehaviorSubject<Recipe[]>(this.recipes);
+    
 
-    recipes$ = this.recipesSubject.asObservable();
-
-    constructor() {}
-
-    addRecipe(recipe: Recipe) {
-      console.log('Добавление рецепта', recipe);
-      recipe.id = (Math.random() * 1000).toFixed(0);
-      recipe.createdAt = new Date();
-      this.recipes.push(recipe);
-      this.recipesSubject.next([...this.recipes]);
+    constructor(private firestore: AngularFirestore) {
+      this.loadRecipesFormLocalStorage();
     }
 
-    updateRecipe(updateRecipe: Recipe) {
-      const index = this.recipes.findIndex(r => r.id === updateRecipe.id);
-      if (index > -1) {
-        this.recipes[index] = updateRecipe;
-        this.recipesSubject.next([...this.recipes]);
+    private loadRecipesFormLocalStorage() {
+      const storedRecipes = localStorage.getItem('recipes');
+      if (storedRecipes) {
+        this.recipes = JSON.parse(storedRecipes);
+      }
+    }
+
+    private saveRecipesToLocalStorage() {
+      localStorage.setItem('recipes', JSON.stringify(this.recipes));
+    }
+
+    getRecipes(): Observable<Recipe[]> {
+      return of(this.recipes);
+    }
+
+    getRecipe(id: string): Observable<Recipe | undefined> {
+      return of(this.recipes.find(recipe => recipe.id === id));
+    }
+
+    addRecipe(recipe: Recipe) {
+      recipe.id = this.generateId();
+      this.recipes.push(recipe);
+      this.saveRecipesToLocalStorage();
+    }
+
+    updateRecipe(recipe: Recipe) {
+      const index = this.recipes.findIndex(r => r.id === recipe.id);
+      if (index !== -1) {
+        this.recipes[index] = recipe;
+        this.saveRecipesToLocalStorage();
       }
     }
 
     deleteRecipe(id: string) {
-      console.log('Удаление рецепта с ID', id);
-      this.recipes = this.recipes.filter(r => r.id !== id);
-      this.recipesSubject.next([...this.recipes]);
+      this.recipes = this.recipes.filter(recipe => recipe.id !== id);
+      this.saveRecipesToLocalStorage();
     }
 
-    getRecipeById(id: string): Recipe | undefined {
-      return this.recipes.find(recipe => recipe.id === id);
+    private generateId(): string {
+      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 }
