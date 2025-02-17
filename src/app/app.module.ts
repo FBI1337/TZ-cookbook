@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { RecipeCreateComponent } from './components/recipe-create/recipe-create.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
+import { RecipeEditComponent } from './components/recipe-edit/recipe-edit.component';
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -18,15 +19,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatListModule } from '@angular/material/list'
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    RecipeListComponent,
     RecipeDetailsComponent,
     RecipeCreateComponent,
-    RecipeListComponent,
+    RecipeEditComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +50,7 @@ import { AngularFireModule } from '@angular/fire/compat';
     MatSelectModule,
     MatCardModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireModule,
+    AngularFireAuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

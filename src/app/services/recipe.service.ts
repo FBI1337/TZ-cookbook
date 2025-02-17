@@ -29,6 +29,7 @@ export class RecipeService {
     }
 
     getRecipes(): Observable<Recipe[]> {
+      console.log('qwerty');
       return of(this.recipes);
     }
 

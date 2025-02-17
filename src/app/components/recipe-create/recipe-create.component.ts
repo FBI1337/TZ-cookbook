@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
 import { RecipeService } from "src/app/services/recipe.service";
 import { UnitService } from "src/app/services/unit.service";
@@ -13,10 +13,11 @@ import { Recipe } from "src/app/models/recipe.model";
 })
 export class RecipeCreateComponent implements OnInit {
 
+    @Input() recipeId: string | null = null;
+
     recipeForm: FormGroup;
     units: Unit[] = [];
     isEditMode: boolean = false;
-    recipeId: string | null = null; 
     imageUrl: string = '';
 
     constructor(
@@ -38,8 +39,6 @@ export class RecipeCreateComponent implements OnInit {
         this.unitService.getUnits().subscribe(units => {
             this.units = units;
         });
-
-        this.recipeId = this.route.snapshot.paramMap.get('id');
         this.isEditMode = !!this.recipeId;
 
         if (this.isEditMode) {

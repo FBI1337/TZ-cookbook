@@ -1,6 +1,5 @@
 <h1>Список рецептов</h1>
 <button mat-raised-button color="primary" (click)="addRecipe()">Создать рецепт</button>
-
 <mat-list>
     <mat-list-item *ngFor="let recipe of recipes">
         <img *ngIf="recipe.imageUrl" matListItemAvatar [src]="recipe.imageUrl" alt="{{recipe.title}}">
