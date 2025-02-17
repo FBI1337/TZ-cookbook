@@ -3,18 +3,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RecipeCreateComponent } from './components/recipe-create/recipe-create.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
-import { RecipeFormComponent } from './components/recipe-form/recipe-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { RecipeDetailsComponent } from './components/recipe-details/recipe-details.component';
+import { RecipeEditComponent } from './components/recipe-edit/recipe-edit.component';
+import { environment } from 'src/environments/environment';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule} from '@angular/material/select'
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { RecipeService } from './services/recipe.service';
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatListModule } from '@angular/material/list'
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 
@@ -22,22 +29,30 @@ import { RecipeService } from './services/recipe.service';
   declarations: [
     AppComponent,
     RecipeListComponent,
-    RecipeFormComponent,
+    RecipeDetailsComponent,
+    RecipeCreateComponent,
+    RecipeEditComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatInputModule,
-    MatDialogModule,
-    MatTableModule,
-    MatFormFieldModule,
+    FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCardModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
   ],
-  providers: [RecipeService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
-<nav>
-    <a routerLink="/" class="link" [class.active]="isActive('/')">Список рецептов</a>
-    <a routerLink="/create" class="link" [class.active]="isActive('/create')">Добавить рецепт</a>
-</nav>
+<mat-toolbar color="primary">
+    <span>{{ title }}</span>
+</mat-toolbar>
 
-<router-outlet></router-outlet>
+<router-outlet>
+</router-outlet>

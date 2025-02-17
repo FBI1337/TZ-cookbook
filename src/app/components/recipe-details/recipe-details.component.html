@@ -1,0 +1,23 @@
+<div *ngIf="recipe">
+    <h1>{{ recipe.title }}</h1>
+    <img *ngIf="recipe.imageUrl" [src]="recipe.imageUrl" alt="{{recipe.title}}">
+    <p>Дата создания: {{ recipe.createdAt | date }}</p>
+
+    <h2>Ингредиенты:</h2>
+    <ul>
+        <li *ngFor="let ingredient of recipe.ingredients">
+            {{ ingredient.name }} - {{ ingredient.amount }} {{ ingredient.unit }}
+        </li>
+    </ul>
+
+    <h2>Описание:</h2>
+    <p>{{ recipe.description }}</p>
+
+    <button mat-raised-button color="primary" (click)="editRecipe()">Редактировать</button>
+    <button mat-raised-button color="warn" (click)="deleteRecipe()">Удалить</button>
+    <button mat-button (click)="goBack()">Назад</button>
+</div>
+
+<div *ngIf="!recipe">=
+    <p>Рецепт не найден.</p>
+</div>

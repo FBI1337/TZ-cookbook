@@ -1,8 +1,4 @@
-export interface Ingredient {
-    name: string;
-    amount: number;
-    unit: string;
-}
+import { Ingredient } from "./ingredient.model";
 
 export interface Recipe {
     id?: string;
